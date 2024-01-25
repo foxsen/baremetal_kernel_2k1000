@@ -77,7 +77,7 @@ hello kernel!
 
 BIOS与内核的交互接口是计算机系统中最重要的接口之一，它约定了bios如何与内核进行信息交互，传递内核命令行参数以及当前硬件的各种配置（内存范围、硬件设备类型、中断、资源分配等），详细情况可以参见龙芯BIOS和内核接口规范。
 
-u-boot缺省设置了两个直接内存映射窗口(即不通过TLB翻译，虚拟地址与物理地址线性映射)，虚地址0x800000xxxxxxxxxx将映射到物理地址xxxxxxxxxx，而且采用uncache访问，虚地址0x900000xxxxxxxxxx映射到物理地址xxxxxxxxxx，用cached访问。内核可以用前者访问IO，后者用来访问常规内存。
+u-boot缺省设置了两个直接内存映射窗口(即不通过TLB翻译，虚拟地址与物理地址线性映射)，虚地址0x800000xxxxxxxxxx将映射到物理地址xxxxxxxxxx，而且采用uncache访问，虚地址0x900000xxxxxxxxxx映射到物理地址xxxxxxxxxx，用cached访问。内核可以用前者访问IO以及需要绕过cache访问内存的场合，用后者经过cache访问内存。
 
 
 
