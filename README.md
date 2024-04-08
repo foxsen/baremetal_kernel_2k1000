@@ -69,6 +69,95 @@ Bytes transferred = 144 (90 hex)
 hello kernel!
 ```
 
+如果用[2k1000 QEMU模拟器](https://github.com/LoongsonLab/2k1000-materials/releases/download/qemu-static-20240401/qemu-static-20240401.tar.xz)运行，则可以根据其说明，在runqemu运行uboot时，长按c键停到uboot命令行，然后设置网络，用tftpboot命令。runqemu缺省用用户级网络模拟，主机侧的ip是10.0.2.2，模拟器侧可以设置为10.0.2.15等，一个样例如下：
+
+```bash
+foxsen@fx:~/software/2k1000/qemu$ ./runqemu
+WARNING: Image format was not specified for './2k1000/u-boot-with-spl.bin' and probing guessed raw.
+         Automatically detecting the format is dangerous for raw images, write operations on block 0 will be restricted.
+         Specify the 'raw' format explicitly to remove the restrictions.
+WARNING: Image format was not specified for '/tmp/disk' and probing guessed raw.
+         Automatically detecting the format is dangerous for raw images, write operations on block 0 will be restricted.
+         Specify the 'raw' format explicitly to remove the restrictions.
+hda-duplex: hda_audio_init: cad 0
+ram=0x3020760
+length=852992 must be 16777216 bytes,run command:
+trucate -s 16777216 file
+ to resize file
+oobsize = 64
+
+
+
+
+qemu-system-loongarch64: warning: nic pci-synopgmac.1 has no peer
+qemu-system-loongarch64: warning: nic e1000e.0 has no peer
+hda-duplex: hda_audio_reset
+hda-duplex: hda_audio_reset
+intel-hda: intel_hda_update_irq: level 0 [intx]
+
+ _     __   __  _  _  ___  ___  __  _  _    /   ___  __  \
+ |    |  | |  | |\ | | __ [__  |  | |\ |    |  | __ |  \ |
+ |___ |__| |__| | \| |__] ___] |__| | \|    \  |__] |__/ /
+
+Trying to boot from SPI
+
+
+U-Boot 2022.04 (Jan 26 2024 - 15:42:00 +0800)
+
+CPU:   LA264
+Speed: Cpu @ 900 MHz/ Mem @ 400 MHz/ Bus @ 125 MHz
+Model: loongson-2k1000
+Board: LS2K1000-DP
+DRAM:  1 GiB
+Core:  74 devices, 20 uclasses, devicetree: board
+cam_disable:1, vpu_disable:1, pcie0_enable:0, pcie1_enable:1
+Loading Environment from SPIFlash... SF: Detected gd25q128 with page size 256 Bytes, erase size 4 KiB, total 16 MiB
+*** Warning - bad CRC, using default environment
+
+Cannot get ddc bus
+In:    serial
+Out:   serial
+Err:   serial vidconsole
+
+eth0: using random MAC address - 36:91:dc:95:40:85
+
+eth1: using random MAC address - e6:46:9b:00:0c:ce
+Net:   eth0: ethernet@40040000, eth1: ethernet@40050000
+************************** Notice **************************
+Press c to enter u-boot console, m to enter boot menu
+************************************************************
+Bus otg@40000000: dwc2_usb otg@40000000: Core Release: 0.000
+dwc2_usb otg@40000000: SNPSID invalid (not DWC2 OTG device): 00000000
+Port not available.
+Bus ehci@40060000: USB EHCI 1.00
+Bus ohci@40070000: USB OHCI 1.0
+scanning bus ehci@40060000 for devices... 3 USB Device(s) found
+scanning bus ohci@40070000 for devices... 2 USB Device(s) found
+init ls_trigger_boot and set it default value
+init ls_trigger_u_kernel and set it default value
+init ls_trigger_u_rootfs and set it default value
+init ls_trigger_u_uboot and set it default value
+Saving Environment to SPIFlash... Erasing SPI flash...Writing to SPI flash...done
+OK
+Autoboot in 0 seconds
+=> setenv ip 10.0.2.15
+=> setenv ipaddr 10.0.2.15
+=> setenv gatewayip 10.0.2.2
+=> tftpboot 0x9000000008000000 10.0.2.2:hello_kernel.bin
+Speed: 1000, full duplex
+Using ethernet@40040000 device
+TFTP from server 10.0.2.2; our IP address is 10.0.2.15; sending through gateway 10.0.2.2
+Filename 'hello_kernel.bin'.
+Load address: 0x9000000008000000
+Loading: #
+	 21.5 KiB/s
+done
+Bytes transferred = 272 (110 hex)
+=> go 0x9000000008000000
+## Starting application at 0x9000000008000000 ...
+hello kernel!
+```
+
 ### 其他渠道
 
 可以把内核放到U盘或者ssd硬盘等，然后灵活应用uboot的load*命令和go命令装载运行。也可以尝试用u-boot提供的mkimage工具把elf文件打包成u-boot认识的uImage镜像。
