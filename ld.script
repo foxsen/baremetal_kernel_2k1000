@@ -8,6 +8,9 @@ SECTIONS
   .text : {
     *(.text .text.*)
     PROVIDE(etext = .);
+    . = ALIGN(0x1000);
+    _keentry = .;
+    *(k_eentry)
   }
 
   .rodata : {
